@@ -8,6 +8,7 @@ import os
 import subprocess
 from datetime import datetime
 from pathlib import Path
+import pdb
 
 
 class Colors:
@@ -128,26 +129,45 @@ def read_json() -> dict:
     logging.info("Reading JSON...")
 
     filename: Path = Path("StorableSidebar.json")
-    if os.name == "nt":
-        arc_root_parent_path: Path = Path(
-            os.path.expanduser(r"~\AppData\Local\Packages")
-        )
-        arc_root_paths: list[Path] = [
-            f
-            for f in arc_root_parent_path.glob("*")
-            if f.name.startswith("TheBrowserCompany.Arc")
-        ]
-        if len(arc_root_paths) != 1:
-            raise FileNotFoundError
 
-        library_path: Path = Path(
-            arc_root_paths[0].joinpath(r"LocalCache\Local\Arc")
-        ).joinpath(filename)
+    arc_root_parent_path: Path = Path(
+        os.path.expanduser(r"/mnt/c/Users/Daniel Wang/AppData/Local/Packages")
+    )
+    arc_root_paths: list[Path] = [
+        f
+        for f in arc_root_parent_path.glob("*")
+        if f.name.startswith("TheBrowserCompany.Arc")
+    ]
+    # pdb.set_trace()
 
-    else:
-        library_path: Path = Path(
-            os.path.expanduser("~/Library/Application Support/Arc/")
-        ).joinpath(filename)
+    if len(arc_root_paths) != 1:
+        raise FileNotFoundError
+
+    library_path: Path = Path(
+        arc_root_paths[0].joinpath(r"LocalCache/Local/Arc")
+    ).joinpath(filename)
+
+
+    # if os.name == "nt":
+    #     arc_root_parent_path: Path = Path(
+    #         os.path.expanduser(r"~\AppData\Local\Packages")
+    #     )
+    #     arc_root_paths: list[Path] = [
+    #         f
+    #         for f in arc_root_parent_path.glob("*")
+    #         if f.name.startswith("TheBrowserCompany.Arc")
+    #     ]
+    #     if len(arc_root_paths) != 1:
+    #         raise FileNotFoundError
+
+    #     library_path: Path = Path(
+    #         arc_root_paths[0].joinpath(r"LocalCache\Local\Arc")
+    #     ).joinpath(filename)
+
+    # else:
+    #     library_path: Path = Path(
+    #         os.path.expanduser("~/Library/Application Support/Arc/")
+    #     ).joinpath(filename)
 
     data: dict = {}
 
